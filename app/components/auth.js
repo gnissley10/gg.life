@@ -14,7 +14,7 @@ async function signIn(email, password, route) {
     .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-        route.push('/dashboard');
+        route.push('/finance');
     })
     .catch((error) => {
         const errorCode = error.code;
@@ -37,13 +37,14 @@ export default function Auth() {
 
     return(
         <div className="flex bg-white rounded-lg shadow-md basis-1/3 h-3/5">
-            <div className="flex flex-col justify-center mx-auto">
-                <h2 className="text-center text-6xl font-bold text-black pb-16">GG.LIFE</h2>
-                <label className="self-center">Email</label>
-                <input className="text-black rounded-md pt-1 pl-1 pb-1 border border-black" type="text" onChange={e => setEmail(e.target.value)}/>
-                <label className="self-center mt-4">Password</label>
-                <input className="text-black rounded-md pt-1 pl-1 pb-1 border border-black" type="password" onChange={e => setPassword(e.target.value)}/>
-                <button className="bg-white rounded-full text-black mt-8 pt-2 pb-2 border border-black" onClick={() => signIn(email, password, route)}>Login</button>
+            <div className="flex flex-col justify-center mx-auto w-96">
+                <h2 className="text-center text-6xl font-bold text-gray-800 pb-16">GG.LIFE</h2>
+
+                <input className="self-center text-gray-800 rounded-md pl-1 bg-gray-50 shadow-md w-64 h-10" type="text" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+
+                <input className="self-center text-gray-800 rounded-md pl-1 bg-gray-50 shadow-md mt-8 w-64 h-10" type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+
+                <button className="self-center bg-gray-800 rounded-md text-white mt-16 pt-2 pb-2 border border-black shadow-md w-48" onClick={() => signIn(email, password, route)}>Login</button>
             </div>
         </div>
     );

@@ -12,14 +12,6 @@ export default function Page() {
 
     const route = useRouter();
 
-    //
-    // Runs only on the first render
-    //
-    useEffect(() => {
-      if(checkAuth() === true) {
-          route.push("/dashboard");
-      }
-    }, []);
 
     return (
       <div className="h-full flex justify-center items-center">
