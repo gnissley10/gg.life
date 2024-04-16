@@ -1,10 +1,12 @@
 import React from "react";
-import { motion } from "framer-motion"
 
 //
 // Month breakdown component on /finance
 //
 export default function MonthBreakdown({ labels, data, averageData}) {
+
+    // console.log(averageData);
+
     return (
 
         <div className="table-fixed">
@@ -25,12 +27,13 @@ export default function MonthBreakdown({ labels, data, averageData}) {
                     <tr>
                     
                         
-                        {data?.map((item) => {
+                        {data?.map((item, index) => {
                             return(   
                                 
                                 <td key={Math.random()} className="group relative">
                                     <div className="flex flex-row text-2xl justify-center">
-                                        <p>{Math.round(parseFloat(item.replace(',', '')))}</p>
+                                        <p>{item}</p>
+                                        <span className="absolute top-10 scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Average: {averageData[index]}</span>
                                     </div>
                                 </td>             
                             );
