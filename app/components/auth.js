@@ -20,6 +20,7 @@ async function signIn(email, password, route) {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage);
+        alert("Incorrect Credentials!");
     });
 }
 
@@ -38,13 +39,13 @@ export default function Auth() {
     return(
         <div className="flex bg-white rounded-lg shadow-md basis-1/3 h-3/5">
             <div className="flex flex-col justify-center mx-auto w-96">
-                <h2 className="text-center text-6xl font-bold text-gray-800 pb-16">GG.LIFE</h2>
+                <h2 className="drop-shadow-md text-center text-6xl font-bold text-red-400 pb-16">GG.LIFE</h2>
 
-                <input className="self-center text-gray-800 rounded-md pl-1 bg-gray-50 shadow-md w-64 h-10" type="text" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+                <input className="self-center text-black rounded-md pl-1 bg-gray-50 shadow-md w-64 h-10" type="text" placeholder="Email" onKeyDown={(e) => {if(e.key === 'Enter')signIn(email, password, route)}} onChange={e => setEmail(e.target.value)}/>
 
-                <input className="self-center text-gray-800 rounded-md pl-1 bg-gray-50 shadow-md mt-8 w-64 h-10" type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+                <input className="self-center text-black rounded-md pl-1 bg-gray-50 shadow-md mt-8 w-64 h-10" type="password" placeholder="Password" onKeyDown={(e) => {if(e.key === 'Enter')signIn(email, password, route)}} onChange={e => setPassword(e.target.value)}/>
 
-                <button className="self-center bg-gray-800 rounded-md text-white mt-16 pt-2 pb-2 border border-black shadow-md w-48" onClick={() => signIn(email, password, route)}>Login</button>
+                <button className="self-center bg-red-400 rounded-md text-white mt-16 pt-2 pb-2 shadow-md w-48 border border-red-400 hover:text-red-400 hover:bg-white" onClick={() => signIn(email, password, route)}>Login</button>
             </div>
         </div>
     );

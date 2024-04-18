@@ -1,14 +1,15 @@
 'use client'
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { auth } from "../config/firebase";
 import { useRouter } from "next/navigation";
 import { checkAuth } from "../util/checkAuth";
-import { SHEETS_AVERAGES, SHEETS_MONTH, SHEETS_TOTALS, SHEETS_MONTHS_TOTALS } from "../api/sheets";
+import { SHEETS_AVERAGES, SHEETS_MONTH, SHEETS_TOTALS, SHEETS_MONTH_TOTALS, SHEETS_MONTH_SAVINGS, SHEETS_MONTH_BUDGET } from "../api/sheets";
 import MonthBreakdown from "./components/MonthBreakdown";
 import { motion } from "framer-motion";
 import "chart.js/auto";
 import { Bar, Line } from 'react-chartjs-2'; 
+import NavMenu from "../components/NavMenu";
 
 
 //
@@ -26,10 +27,8 @@ export default function Page() {
         const [month, setMonth] = useState(d.getMonth());
         const [averageData, setAverageData] = useState([]);
         const [totalData, setTotalData] = useState([]);
-
-        async function toNumber(value) {
-            console.log(value);
-        }
+        const [savingsData, setSavingsData] = useState([])
+        const [budgetData, setBudgetData] = useState([])
 
         //
         // Properties for Line Chart
@@ -57,14 +56,14 @@ export default function Page() {
             datasets: [
             {
                 label: 'Savings',
-                data: [],
+                data: savingsData,
                 fill: false,
                 backgroundColor: "#6ed266",
                 tension: 0.1
             },
             {
                 label: 'Budget',
-                data: [],
+                data: budgetData,
                 fill: false,
                 backgroundColor: 'rgb(37, 150, 190)',
                 tension: 0.1
@@ -72,61 +71,79 @@ export default function Page() {
             ],
         };
 
-
         //
         // Get data for first render
         //
         useEffect(() => {
+
+            //
+            // If not authenticated - redirect to login
+            //
+            if(!checkAuth()) {
+                route.push("/")
+            } 
             
             // Get Averages of year
             SHEETS_AVERAGES("2024").then((result) => {setAverageData(result.map(e => Math.round(Number(e.replace(',', '')))))});
 
             // Get month data
             SHEETS_MONTH("2024", month).then((result) => {setMonthData(result.map(e => Math.round(Number(e.replace(',', '')))))});
-
-            // Get Totals of year
-            // SHEETS_TOTALS("2024").then((result) => {setTotalData(result);});
                         
-            // Get Totals of year
-            SHEETS_MONTHS_TOTALS("2024").then((result) => {setTotalData(result.map(e => Math.round(Number(e.replace(',', '')))))});
+            // Get totals of each month
+            SHEETS_MONTH_TOTALS("2024").then((result) => {setTotalData(result.map(e => Math.round(Number(e.replace(',', '')))))})
+
+            // Get savings for each month
+            SHEETS_MONTH_SAVINGS("2024").then((result) => {setSavingsData(result.map(e => Math.round(Number(e.replace(',', '')))))})
+
+            // Get savings for each month
+            SHEETS_MONTH_BUDGET("2024").then((result) => {setBudgetData(result.map(e => Math.round(Number(e.replace(',', '')))))})
+
         }, []);
 
+        //
+        // Returned HTML
+        //
+
         return(
-            <div className="h-full flex flex-col justify-center items-center">
+            <div>
+            <NavMenu/>
+            <div className="flex flex-col justify-center items-center pt-6">
 
                 {/* Graphs */}
-                <div className="flex flex-col bg-white rounded-lg shadow-md w-4/5 h-3/5">
+                
+                <div className="flex flex-col bg-white rounded-lg shadow-md w-11/12 h-3/5 border-2 border-red-400">
 
- 
-                        <h2 className="text-center text-4xl font-medium text-black pt-8">{d.getFullYear()} Breakdown</h2>
+                    <h2 className="text-center text-4xl font-medium text-black pt-4">{d.getFullYear()} Financial Breakdown</h2>
 
-                        <div className="flex flex-row justify-center">
-                            <div className='basis-1/2 m-8'>
-                                <Line data={lineChartData} />
-                            </div>
-                            <div className='basis-1/2 m-8'>
-                                <Bar data={barChartData}/>
-                            </div>
+                    <div className="flex flex-row justify-center">
+                        <div className='w-1/2 m-8'>
+                            <Line data={lineChartData} />
+                            <h2 className="text-center text-2xl font-medium text-black pt-4">Monthly Spending</h2>
                         </div>
+                        <div className='w-1/2 m-8'>
+                            <Bar data={barChartData}/>
+                            <h2 className="text-center text-2xl font-medium text-black pt-4">Savings vs. Budget</h2>
+                        </div>  
+                    </div>
                
                 </div>
 
                 {/* Month Breakdown */}
-                <div className="flex bg-white rounded-lg shadow-md w-4/5 h-1/4 mt-10">
+                <div className="flex bg-white rounded-lg shadow-md w-10/12 h-1/5 mt-8 border-2 border-red-400">
                     <div className="flex flex-col mx-auto">    
 
                         <motion.div key={month} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}>
                         
-                            <h2 className="text-center text-4xl font-medium text-black pt-8">{months[month - 1]} Breakdown</h2>
+                            <h2 className="text-center text-4xl font-medium text-black pt-8">{months[month]} Breakdown</h2>
 
                         </motion.div>
 
-                        <div className="pt-8 flex flex-row">
+                        <div className="pt-4 flex flex-row mb-6">
 
                             {/* Left Arrow */}
-                            {month == 1 
+                            {month === 0 
                                 ? null
-                                : <svg onClick={() => [SHEETS_MONTH("2024", month - 1).then((result) => {result.map(e => Math.round(Number(e.replace(',', ''))))}), setMonth(month - 1)]} className="h-8 w-8 text-black"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                : <svg onClick={() => [SHEETS_MONTH("2024", month - 1).then((result) => { setMonthData(result.map(e => Math.round(Number(e.replace(',', '')))))}), setMonth(month - 1)]} className="h-8 w-8 text-black"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/>
                                   </svg> }
 
@@ -137,9 +154,9 @@ export default function Page() {
                             </motion.div>
 
                             {/* Right Arrow */} 
-                            {d.getMonth() == month 
+                            {month === d.getMonth()
                                 ? null 
-                                : <svg  onClick={() => [SHEETS_MONTH("2024", month + 1).then((result) => { setMonthData(result);}), setMonth(month + 1)]} className="h-8 w-8 text-black"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                : <svg  onClick={() => [SHEETS_MONTH("2024", month + 1).then((result) => { setMonthData(result.map(e => Math.round(Number(e.replace(',', '')))))}), setMonth(month + 1)]} className="h-8 w-8 text-black"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
                                   </svg> }
 
@@ -148,6 +165,7 @@ export default function Page() {
                     </div>
                 </div>
 
+            </div>
             </div>
         );
 

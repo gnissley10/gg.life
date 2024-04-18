@@ -5,7 +5,7 @@ import { auth } from "../config/firebase";
 //
 export function checkAuth(){
 
-    if(auth.currentUser == null) {
+    if(auth.currentUser === null) {
         return false;
     } else {
         return true;
