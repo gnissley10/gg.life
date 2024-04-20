@@ -32,6 +32,9 @@ export default function MonthBreakdown({ labels, data, averageData}) {
 
     }
 
+    //
+    // Returned Component
+    //
     return (
 
         <div className="table-fixed">

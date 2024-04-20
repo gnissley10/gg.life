@@ -10,6 +10,8 @@ import { motion } from "framer-motion";
 import "chart.js/auto";
 import { Bar, Line } from 'react-chartjs-2'; 
 import NavMenu from "../components/NavMenu";
+import GraphBreakdown from "./components/GraphBreakdown";
+import BillSchedule from "./components/BillSchedule";
 
 
 //
@@ -29,47 +31,6 @@ export default function Page() {
         const [totalData, setTotalData] = useState([]);
         const [savingsData, setSavingsData] = useState([])
         const [budgetData, setBudgetData] = useState([])
-
-        //
-        // Properties for Line Chart
-        //
-        const lineChartData = {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [
-            {
-                label: 'Spending',
-                // data: totalData,
-                data: totalData,
-                fill: false,
-                backgroundColor: "#dc2626",
-                borderColor: '#dc2626',
-                tension: 0.1
-            },
-            ],
-        };
-
-        //
-        // Properties for Bar Chart
-        //
-        const barChartData = {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [
-            {
-                label: 'Savings',
-                data: savingsData,
-                fill: false,
-                backgroundColor: "#6ed266",
-                tension: 0.1
-            },
-            {
-                label: 'Budget',
-                data: budgetData,
-                fill: false,
-                backgroundColor: 'rgb(37, 150, 190)',
-                tension: 0.1
-            },
-            ],
-        };
 
         //
         // Get data for first render
@@ -105,31 +66,20 @@ export default function Page() {
         //
 
         return(
-            <div>
+            <div className='h-screen'>
             <NavMenu/>
-            <div className="flex flex-col justify-center items-center pt-6">
+            <div className="flex flex-col justify-center items-center pt-10 h-5/6">
 
-                {/* Graphs */}
-                
-                <div className="flex flex-col bg-white rounded-lg shadow-md w-11/12 h-3/5 border-2 border-red-400">
+                <div className="flex flex-row h-3/4 w-3/4 justify-center">
+                    {/* Graphs */}
+                    <GraphBreakdown totalData={totalData} savingsData={savingsData} budgetData={budgetData} />
 
-                    <h2 className="text-center text-4xl font-medium text-black pt-4">{d.getFullYear()} Financial Breakdown</h2>
-
-                    <div className="flex flex-row justify-center">
-                        <div className='w-1/2 m-8'>
-                            <Line data={lineChartData} />
-                            <h2 className="text-center text-2xl font-medium text-black pt-4">Monthly Spending</h2>
-                        </div>
-                        <div className='w-1/2 m-8'>
-                            <Bar data={barChartData}/>
-                            <h2 className="text-center text-2xl font-medium text-black pt-4">Savings vs. Budget</h2>
-                        </div>  
-                    </div>
-               
+                    {/* Bill Schedule */}
+                    <BillSchedule/>
                 </div>
 
                 {/* Month Breakdown */}
-                <div className="flex bg-white rounded-lg shadow-md w-10/12 h-1/5 mt-8 border-2 border-red-400">
+                <div className="flex bg-white rounded-lg shadow-md w-10/12 h-1/4 mt-8">
                     <div className="flex flex-col mx-auto">    
 
                         <motion.div key={month} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}>
@@ -142,7 +92,7 @@ export default function Page() {
 
                             {/* Left Arrow */}
                             {month === 0 
-                                ? null
+                                ? <div className="h-8 w-8"></div>
                                 : <svg onClick={() => [SHEETS_MONTH("2024", month - 1).then((result) => { setMonthData(result.map(e => Math.round(Number(e.replace(',', '')))))}), setMonth(month - 1)]} className="h-8 w-8 text-black"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/>
                                   </svg> }
@@ -155,7 +105,7 @@ export default function Page() {
 
                             {/* Right Arrow */} 
                             {month === d.getMonth()
-                                ? null 
+                                ? <div className="h-8 w-8"></div>
                                 : <svg  onClick={() => [SHEETS_MONTH("2024", month + 1).then((result) => { setMonthData(result.map(e => Math.round(Number(e.replace(',', '')))))}), setMonth(month + 1)]} className="h-8 w-8 text-black"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
                                   </svg> }
