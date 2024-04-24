@@ -68,9 +68,9 @@ export default function Page() {
         return(
             <div className='h-screen'>
             <NavMenu/>
-            <div className="flex flex-col justify-center items-center pt-10 h-5/6">
+            <div className="flex flex-col justify-center items-center pt-12 h-5/6">
 
-                <div className="flex flex-row h-3/4 w-3/4 justify-center">
+                <div className="flex flex-row h-3/4 w-11/12 justify-center">
                     {/* Graphs */}
                     <GraphBreakdown totalData={totalData} savingsData={savingsData} budgetData={budgetData} />
 
@@ -79,7 +79,7 @@ export default function Page() {
                 </div>
 
                 {/* Month Breakdown */}
-                <div className="flex bg-white rounded-lg shadow-md w-10/12 h-1/4 mt-8">
+                <div className="flex bg-white rounded-lg shadow-md w-11/12 h-1/4 mt-8">
                     <div className="flex flex-col mx-auto">    
 
                         <motion.div key={month} initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}>
