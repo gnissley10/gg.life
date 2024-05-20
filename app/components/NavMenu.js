@@ -18,7 +18,7 @@ export default function NavMenu() {
         });
     }
 
-    function generateStyle(match) {
+    function GenerateStyle(match) {
         if(usePathname() === match) {
             return "shadow-md border border-red-400 px-4 mx-4 py-1 text-xl font-medium bg-red-400 text-white rounded-md hover:bg-white hover:text-red-400";
         } else {
@@ -38,7 +38,7 @@ export default function NavMenu() {
             <div className="ml-10 w-full flex flex-row">
 
                 <div className="self-center">
-                    <button className={generateStyle("/finance")}>Finance</button>
+                    <button className={GenerateStyle("/finance")}>Finance</button>
                 </div>
 
                 <div className="self-center ml-auto">
