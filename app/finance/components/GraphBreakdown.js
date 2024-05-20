@@ -57,7 +57,7 @@ export default function GraphBreakdown({ totalData, savingsData, budgetData}) {
 
             return(
 
-                <div className="flex flex-col items-center justify-center w-4/5">
+                <div className="flex flex-col items-center justify-center w-4/5 ">
 
                     <div className='p-4 w-5/6'>
                         <h2 className="text-center text-4xl font-medium text-black pb-6">Monthly Spending</h2>
@@ -96,7 +96,7 @@ export default function GraphBreakdown({ totalData, savingsData, budgetData}) {
     //
     return (
 
-        <div className="flex flex-row bg-white rounded-lg shadow-md w-3/5 h-full justify-center">
+        <div className="flex flex-row bg-white rounded-lg shadow-md w-full xl:w-3/5 justify-center">
 
             {/* Left Arrow */}
             {graph === "spending"

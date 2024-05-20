@@ -11,11 +11,11 @@ export default function BillSchedule() {
     //
     const schedule = {
         "Internet": {"date": 1, "amount": 55},
-        "G Student Loan": {"date": 6, "amount": 276},
+        "GLoan": {"date": 6, "amount": 276},
         "Rav-4 Loan": {"date": 7, "amount": 300},
         "PPL": {"date": 7, "amount": "~~"},
         "Phone": {"date": 7, "amount": 25},
-        "E Student Loans": {"date": 17, "amount": 350}
+        "ELoans": {"date": 17, "amount": 350}
     }
 
     const d = new Date();
@@ -25,14 +25,14 @@ export default function BillSchedule() {
 
 
     return(
-        <div className="flex flex-col bg-white rounded-lg shadow-md w-2/5 ml-8 items-center">
+        <div className="overflow-auto flex flex-col bg-white rounded-lg shadow-md w-full xl:w-2/5 xl:ml-8 items-center mt-8 xl:mt-0">
     
                 <h2 className="text-center text-4xl font-medium text-black pt-8">Bill Schedule</h2>
 
-                <table className="table-fixed w-4/5 mt-6 shadow-md rounded-md border border-separate border-black">
+                <table className="table w-4/5 mt-6 shadow-md rounded-md border border-separate border-black mb-6">
                     <thead>
                         <tr>
-                            <th className="text-xl pb-2">Description</th>
+                            <th className="text-xl">Description</th>
                             <th className="text-xl">Date</th>
                             <th className="text-xl">Amount</th>
                             <th className="text-xl">Status</th>
