@@ -62,7 +62,6 @@ export default function MonthBreakdown({ labels, data, averageData}) {
                                     <div className="flex flex-row xl:text-2xl justify-center">
                                         <p>{item}$</p>
                                         {generateTick(item, averageData[index], index)}
-                                        <span className="absolute top-10 scale-0 rounded bg-gray-800 p-2 text-xs text-white group-hover:scale-100">Average: {averageData[index]}$</span>
                                     </div>
                                 </td>             
                             );
